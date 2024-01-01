@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <%- include('../css_js_partials/style') %>
+</head>
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <%- include('../admin/partials/sidebar') %>
+        <!-- Sidebar End -->
+        <div class="content">
+            <!-- Navbar Start -->
+        <%- include('../admin/partials/navbar') %>            
+             <!-- Navbar End -->
+
+             <div class="container-fluid pt-4 px-4">
+                <div class="row g-4 d-flex justify-content-center">
+                    <div class="col-md-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Change Password</h6>
+                            <% if(success) { %>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fa fa-exclamation-circle me-2"></i><%=success%>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <% } %>
+                            <div class="alert"></div>
+                            <form action="/admin/settings/<%= user.id %>" method="post" class="row g-3">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="text" name="email" value="<%= user.email %>" placeholder="Email Address" class="form-control" id="email" required>
+                                        <% if(errors && errors.email){ %>
+                                            <span class="text-danger"><%= errors.email.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Current Password</label>
+                                        <input type="password" name="current_password" placeholder="current_password" class="form-control" id="current_password" required>
+                                        <% if(errors && errors.current_password){ %>
+                                            <span class="text-danger"><%= errors.current_password.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">New Password</label>
+                                        <input type="password" name="password" placeholder="new_password" class="form-control" id="password" required>
+                                        <% if(errors && errors.password){ %>
+                                            <span class="text-danger"><%= errors.password.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+                       
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../css_js_partials/scripts') %>
+</body>
+</html>

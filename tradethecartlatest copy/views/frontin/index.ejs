@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart To Trade</title>
+  <%- include('../css_js_partials/style.ejs') %>
+</head>
+
+<body>
+  <%- include('./common/navbar.ejs') %>
+
+
+
+  <div class="container mt-5">
+    <div class="row mb-3">
+      <!-- Search Input -->
+      <div class="col-md-4 mb-3">
+        <div class="input-group">
+          <input type="text" class="form-control" id="search" placeholder="Type your search">
+          <!-- <button class="btn btn-primary" type="button" id="searchButton">Search</button> -->
+        </div>
+      </div>
+
+      <!-- Radio Buttons -->
+      <div class="col-md-8 mb-3 justify-content-center">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="collection" id="all" value="all" checked>
+          <label class="form-check-label" for="all">All</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="collection" id="inCollection" value="inCollection" <% if (!loggedIn) { %>data-bs-toggle="modal" data-bs-target="#loginModal" <% } %>>
+          <label class="form-check-label" for="inCollection">In Collection</label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="collection" id="notInCollection" <% if (!loggedIn) { %>data-bs-toggle="modal" data-bs-target="#loginModal" <% } %> value="notInCollection">
+          <label class="form-check-label" for="notInCollection">Not in Collection</label>
+        </div>
+
+
+      </div>
+      <div class="d-flex justify-content-start align-self-center">
+
+        <div>
+          <select class="form-select form-select-sm" aria-label=".form-select-sm example" onchange="sortCards(this.value)">
+            <option selected value="">Sort By</option>
+            <option value="des">Card name (Z-A)</option>
+            <option value="asc">Card name (A-Z)</option>
+
+          </select>
+
+        </div>
+
+        <div class="ms-3">
+          <select class="form-select form-select-sm" aria-label=".form-select-sm example" onchange="sortCardsFrom(this.value)">
+            <option selected value="">Sort From</option>
+            <option value="old">Old To New</option>
+            <option value="new">New To Old</option>
+
+          </select>
+
+        </div>
+
+        <div class="ms-3">
+          <select class="form-select form-select-sm" aria-label=".form-select-sm example" onchange="sortCardsSets(this.value)">
+            <option selected value="">Sort From Sets</option>
+            <% setsData.forEach(set => { %>
+              <option value="<%= set.id %>"><%= set.name %></option>
+            <% }); %>
+
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="row" id="pokemonCards">
+      <!-- Loop through the pokemons and render cards -->
+      <% pokemons.forEach(pokemon => { %>
+      <div class="col-sm-12 col-md-2 mb-4 ">
+        <a href="/card/<%= pokemon.id %>">
+          <div class="card hover-effect shadow-sm">
+            <img src="/img/cards/<%= pokemon.image %>" class="card-img-top" alt="<%= pokemon.name %>">
+          </div>
+        </a>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+
+
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Login Required</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Please log in to access this feature.</p>
+          <!-- Link to the login page without using data-bs-dismiss -->
+          <a href="/login" class="btn btn-primary" id="goToLogin">Go to login</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <%- include('./common/footer.ejs') %>
+
+  <%- include('../css_js_partials/scripts.ejs') %>
+
+  <script>
+    var loggedIn = <%= loggedIn %>;
+    var userid = <%= user_id %>;
+  </script>
+
+
+  <script>
+    $(document).ready(function() {
+      // Event listener for the search button
+      $("#search").on("input", function() {
+        const searchTerm = $(this).val().toLowerCase();
+        const collectionFilter = $("input[name='collection']:checked").val();
+        filterPokemons(searchTerm, collectionFilter);
+      });
+      // Event listener for the radio buttons
+      $("input[name='collection']").on("change", function() {
+        const searchTerm = $("#search").val().toLowerCase();
+        const collectionFilter = $(this).val();
+        filterPokemons(searchTerm, collectionFilter);
+      });
+
+      // Function to filter Pokémon cards based on search term using AJAX
+      function filterPokemons(searchTerm, collectionFilter) {
+        $.ajax({
+          url: "/filter",
+          method: "POST",
+          data: {
+            searchTerm: searchTerm,
+            collection: collectionFilter
+          },
+          success: function(data) {
+           // console.log("mydata", data.pokemons);
+
+            // Call a function to update the Pokemon cards
+            updatePokemonCards(data.pokemons);
+          },
+          error: function(err) {
+            console.error("Error filtering Pokémon:", err);
+          }
+        });
+      }
+
+  
+
+      // Function to update the Pokemon cards
+      function updatePokemonCards(pokemons) {
+        // Clear the existing content
+        $("#pokemonCards").empty();
+
+        // Loop through the updated pokemons and render cards
+        pokemons.forEach(pokemon => {
+          const cardHtml = `
+        <div class="col-sm-12 col-md-2 mb-4">
+          <a href="/card/${pokemon.id}">
+            <div class="card hover-effect shadow-sm">
+              <img src="/img/cards/${pokemon.image}" class="card-img-top" alt="${pokemon.name}">
+            </div>
+          </a>
+        </div>
+      `;
+          $("#pokemonCards").append(cardHtml);
+        });
+      }
+    });
+
+    // collection
+    $(document).ready(function() {
+
+      $("#inCollection").on('click', function() {
+        if (loggedIn) {
+          console.log('iiff', userid, loggedIn)
+          if (userid) {
+            console.log('second', userid, loggedIn)
+            $.ajax({
+              url: '/collections/' + userid,
+              method: 'GET',
+              success: function(res) {
+                console.log(res)
+                updatePokemonCardsByradio(res.pokemons);
+              },
+              error: function(error) {
+                console.error('Error:', error);
+              }
+            })
+          }
+
+        }
+      })
+    })
+
+    // Function to update the Pokemon cards
+    function updatePokemonCardsByradio(pokemons) {
+      // Clear the existing content
+      $("#pokemonCards").empty();
+
+      // Loop through the updated pokemons and render cards
+      pokemons.forEach(pokemon => {
+        const cardHtml = `
+        <div class="col-sm-12 col-md-2 mb-4">
+          <a href="/card/${pokemon.pokemon_id}">
+            <div class="card hover-effect shadow-sm">
+              <img src="/img/cards/${pokemon.image}" class="card-img-top" alt="${pokemon.name}">
+            </div>
+          </a>
+        </div>
+      `;
+        $("#pokemonCards").append(cardHtml);
+      });
+    }
+
+
+    // Not In collection
+    $(document).ready(function() {
+
+      $("#notInCollection").on('click', function() {
+        if (loggedIn) {
+          console.log('not', userid, loggedIn)
+          if (userid) {
+            console.log('second not', userid, loggedIn)
+            $.ajax({
+              url: '/not-in-collection/' + userid,
+              method: 'GET',
+              success: function(res) {
+                console.log(res)
+                updatePokemonCardsByNotradio(res.pokemons);
+              },
+              error: function(error) {
+                console.error('Error:', error);
+              }
+            })
+          }
+
+        }
+      })
+    })
+
+    // Function to update the Pokemon cards
+    function updatePokemonCardsByNotradio(pokemons) {
+      // Clear the existing content
+      $("#pokemonCards").empty();
+
+      // Loop through the updated pokemons and render cards
+      pokemons.forEach(pokemon => {
+        const cardHtml = `
+        <div class="col-sm-12 col-md-2 mb-4">
+          <a href="/card/${pokemon.pokemon_id ? pokemon.pokemon_id:pokemon.id }">
+            <div class="card hover-effect shadow-sm">
+              <img src="/img/cards/${pokemon.image }" class="card-img-top" alt="${pokemon.name}">
+            </div>
+          </a>
+        </div>
+      `;
+        $("#pokemonCards").append(cardHtml);
+      });
+    }
+
+
+
+    // sorting By
+    async function sortCards(sortOrder) {
+
+      if (sortOrder != "") {
+        try {
+          console.log("dssf")
+          const response = await fetch(`/sort-cards/${sortOrder}`);
+          const data = await response.json();
+
+          // Handle the sorted data, e.g., update your UI with the sorted cards
+          if (data.pokemons) {
+            updatePokemonCardsByNotradio(data.pokemons)
+          }
+          console.log(data.pokemons);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+
+      }
+
+    }
+
+    // sorting from
+    async function sortCardsFrom(sortOrderfrom) {
+      if (sortOrderfrom != "") {
+        try {
+          console.log("order",sortOrderfrom)
+          const response = await fetch(`/sort-cards-from/${sortOrderfrom}`);
+          const data = await response.json();
+
+          // Handle the sorted data, e.g., update your UI with the sorted cards
+          if (data.pokemons) {
+            updatePokemonCardsByNotradio(data.pokemons)
+          }
+          console.log(data);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+
+      }
+
+
+      
+    }
+
+        // sorting from
+        async function sortCardsSets(set) {
+      if (set != "") {
+        try {
+          console.log("order",set)
+          const response = await fetch(`/sort-cards-from-set/${set}`);
+          const data = await response.json();
+
+          
+          if (data.pokemons) {
+            updatePokemonCardsByNotradio(data.pokemons)
+          }
+          console.log(data);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+
+      }
+
+    }
+  </script>
+
+</body>
+
+</html>

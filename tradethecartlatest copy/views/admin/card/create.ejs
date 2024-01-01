@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <%- include('../../css_js_partials/style') %>
+</head>
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <%- include('../partials/sidebar') %>
+        <!-- Sidebar End -->
+        <div class="content">
+            <!-- Navbar Start -->
+        <%- include('../partials/navbar') %>            
+             <!-- Navbar End -->
+
+              <!-- Sale & Revenue Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Create a new card</h6>
+                            <form action="/admin/cards/create" method="post" class="row g-3" enctype="multipart/form-data">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" name="name" class="form-control" id="name" aria-describedby="nameHelp" required>
+                                        <% if(errors && errors.name){ %>
+                                            <span class="text-danger"><%= errors.name.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="rarity" class="form-label">Rrarity</label>
+                                        <input type="text" name="rarity" class="form-control" id="rarity" required>
+                                        <% if(errors && errors.rarity){ %>
+                                            <span class="text-danger"><%= errors.rarity.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="hp" class="form-label">HP</label>
+                                        <input type="text" name="hp" class="form-control" id="hp" required>
+                                        <% if(errors && errors.hp){ %>
+                                            <span class="text-danger"><%= errors.hp.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="retreat" class="form-label">Retreat</label>
+                                        <input type="text" name="retreat" class="form-control" id="retreat">
+                                        <% if(errors && errors.retreat){ %>
+                                            <span class="text-danger"><%= errors.retreat.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="evolveFrom" class="form-label">Evolve From</label>
+                                        <input type="text" name="evolveFrom" class="form-control" id="evolveFrom">
+                                        <% if(errors && errors.evolveFrom){ %>
+                                            <span class="text-danger"><%= errors.evolveFrom.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="category" class="form-label">Category</label>
+                                        <select name="category_id" class="form-select mb-3" aria-label="Default select example" required>
+                                            <option selected>Select Category</option>
+                                            <% categories.forEach(category => { %>
+                                                <option value="<%= category.id %>"><%= category.name %></option>
+                                            <% }); %>
+                                        </select>
+                                        <% if(errors && errors.category_id){ %>
+                                            <span class="text-danger"><%= errors.categories.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea name="description" class="form-control" id="description"></textarea>
+                                        <% if(errors && errors.description){ %>
+                                            <span class="text-danger"><%= errors.description.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="set" class="form-label">Set (Base)</label>
+                                        <select name="set_id" class="form-select mb-3" aria-label="Default select example">
+                                            <option selected>Select Set</option>
+                                            <% sets.forEach(set => { %>
+                                                <option value="<%= set.id %>"><%= set.id %></option>
+                                            <% }); %>
+                                        </select>
+                                        <% if(errors && errors.set_id){ %>
+                                            <span class="text-danger"><%= errors.set_id.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="image" class="form-label">Card Image</label>
+                                        <input type="file" name="image" class="form-control" id="image">
+                                        <% if(errors && errors.image){ %>
+                                            <span class="text-danger"><%= errors.image.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+                       
+                                <button type="submit" class="btn btn-primary">Create</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sale & Revenue End -->
+        </div>
+    </div>
+
+    <%- include('../../css_js_partials/scripts') %>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <%- include('../../css_js_partials/style') %>
+</head>
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <%- include('../partials/sidebar') %>
+        <!-- Sidebar End -->
+        <div class="content">
+            <!-- Navbar Start -->
+        <%- include('../partials/navbar') %>            
+             <!-- Navbar End -->
+
+              <!-- Sale & Revenue Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Edit Serie</h6>
+                            <form action="/admin/series/edit/<%=serie.id%>" method="post" class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="id" class="form-label">Series ID</label>
+                                        <input type="text" name="id" value="<%=serie.id%>" placeholder="series_id" class="form-control" id="id" required style="text-transform: lowercase;">
+                                        <% if(errors && errors.id){ %>
+                                            <span class="text-danger"><%= errors.id.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" name="name" value="<%=serie.name%>" placeholder="series name" class="form-control" id="name" aria-describedby="nameHelp" required>
+                                        <% if(errors && errors.name){ %>
+                                            <span class="text-danger"><%= errors.name.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div> 
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="logo" class="form-label">Set Logo</label>
+                                        <input type="file" name="logo" value="<%=serie.logo%>" class="form-control" id="logo">
+                                        <% if(errors && errors.logo){ %>
+                                            <span class="text-danger"><%= errors.logo.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+                       
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sale & Revenue End -->
+        </div>
+    </div>
+
+    <%- include('../../css_js_partials/scripts') %>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <%- include('../../css_js_partials/style') %>
+</head>
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <%- include('../partials/sidebar') %>
+        <!-- Sidebar End -->
+        <div class="content">
+            <!-- Navbar Start -->
+        <%- include('../partials/navbar') %>            
+             <!-- Navbar End -->
+
+              <!-- Sale & Revenue Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Edit Set</h6>
+                            <form action="/admin/sets/edit/<%=set.id%>" method="post" class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="id" class="form-label">Set ID</label>
+                                        <input type="text" name="id" value="<%= set.id %>" class="form-control" id="id" required style="text-transform: lowercase;">
+                                        <% if(errors && errors.id){ %>
+                                            <span class="text-danger"><%= errors.id.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" name="name" value="<%= set.name %>" class="form-control" id="name" aria-describedby="nameHelp" required>
+                                        <% if(errors && errors.name){ %>
+                                            <span class="text-danger"><%= errors.name.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div> 
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="serie" class="form-label">Series</label>
+                                        <select name="serie_id" value="<%= set.serie_id %>" class="form-select mb-3" aria-label="Default select example">
+                                            <option selected disabled>Select Series</option>
+                                            <% series.forEach(serie => { %>
+                                                <option value="<%= serie.id %>" <% if (set.serie_id == serie.id) { %>selected<% } %>>
+                                                    <%= serie.id %>
+                                                </option>
+                                            <% }); %>
+                                        </select>
+                                        <% if(errors && errors.serie_id){ %>
+                                            <span class="text-danger"><%= errors.serie_id.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>                          
+                                
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <h6 class="text-center">Card Count</h6>
+                                        <div class="col-sm-6">
+                                            <div class="mb-3">
+                                                <label for="official" class="form-label">Official Count</label>
+                                                <% const cardCount = JSON.parse(set.card_count); %>
+                                                <input type="text" name="official" value="<%= cardCount.official %>" class="form-control" id="official">
+                                                <% if(errors && errors.official){ %>
+                                                    <span class="text-danger"><%= errors.card_count.msg %></span>
+                                                  <% } %>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="mb-3">
+                                                <label for="total" class="form-label">Total Count</label>
+                                                <input type="text" name="total" value="<%= cardCount.total %>" class="form-control" id="total">
+                                                <% if(errors && errors.total){ %>
+                                                    <span class="text-danger"><%= errors.total.msg %></span>
+                                                  <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="logo" class="form-label">Set Logo</label>
+                                        <input type="file" name="logo" value="<%= set.logo %>" class="form-control" id="logo">
+                                        <% if(errors && errors.logo){ %>
+                                            <span class="text-danger"><%= errors.logo.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <img src="<%= set.logo %>" alt="logo" width="100px" />
+                                    </div>
+                                </div>
+
+                       
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sale & Revenue End -->
+        </div>
+    </div>
+
+    <%- include('../../css_js_partials/scripts') %>
+</body>
+</html>

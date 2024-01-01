@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <%- include('../css_js_partials/style') %>
+</head>
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <%- include('../admin/partials/sidebar') %>
+        <!-- Sidebar End -->
+        <div class="content">
+            <!-- Navbar Start -->
+        <%- include('../admin/partials/navbar') %>            
+             <!-- Navbar End -->
+
+             <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-md-12">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Edit Profile</h6>
+                            <% if(success) { %>
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    <i class="fa fa-exclamation-circle me-2"></i><%=success%>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <% } %>
+                                
+                            <form action="/admin/profile/<%= user.id %>" method="post" class="row g-3" enctype="multipart/form-data">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="first_name" class="form-label">First Name</label>
+                                        <input type="text" name="first_name" value="<%= user.first_name %>" placeholder="first name" class="form-control" id="first_name" required>
+                                        <% if(errors && errors.first_name){ %>
+                                            <span class="text-danger"><%= errors.first_name.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="last_name" class="form-label">Last Name</label>
+                                        <input type="text" name="last_name" value="<%= user.last_name %>" placeholder="last name" class="form-control" id="last_name">
+                                        <% if(errors && errors.last_name){ %>
+                                            <span class="text-danger"><%= errors.last_name.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">Address</label>
+                                        <input type="text" name="address" value="<%= user.address %>" placeholder="address" class="form-control" id="address">
+                                        <% if(errors && errors.address){ %>
+                                            <span class="text-danger"><%= errors.address.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="country" class="form-label">Country</label>
+                                        <input type="text" name="country" value="<%= user.country %>" placeholder="country name" class="form-control" id="country">
+                                        <% if(errors && errors.country){ %>
+                                            <span class="text-danger"><%= errors.country.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="dob" class="form-label">Birth Date</label>
+                                        <%console.log("DOB",user.dob)%>
+                                        <% const dob = new Date(user.dob) %>
+                                        <% const formatedDOB = dob.toISOString().split('T')[0] %>
+                                        <% console.log("Data", formatedDOB) %>
+                                        <input type="date" name="dob" value="<%= formatedDOB %>" class="form-control" id="dob">
+                                        <% if(errors && errors.dob){ %>
+                                            <span class="text-danger"><%= errors.dob.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="profile_photo_path" class="form-label">Profile Image</label>
+                                        <input type="file" name="profile_photo_path" class="form-control" id="profile_photo_path">
+                                        <% if(errors && errors.profile_photo_path){ %>
+                                            <span class="text-danger"><%= errors.profile_photo_path.msg %></span>
+                                          <% } %>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <fieldset class="row mb-3">
+                                            <legend class="col-form-label col-sm-2 pt-0">Gender</legend>
+                                            <div class="col-sm-10">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="gender" id="male" value="male" <% if (user.gender == "male") { %>checked<% } %>>
+                                                    <label class="form-check-label" for="male">
+                                                        Male
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="gender" id="female" value="female" <% if (user.gender == "female") { %>checked<% } %>>
+                                                    <label class="form-check-label" for="female">
+                                                        Female
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <%console.log(user)%>
+                                        <% if (user && user.profile_photo_path) {%>
+                                            <img src="/img/<%= user.profile_photo_path %>" alt="profile-image" width="150px" height="150px" />
+                                        <%} %>
+                                    </div>
+
+                                </div>
+                       
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../css_js_partials/scripts') %>
+</body>
+</html>

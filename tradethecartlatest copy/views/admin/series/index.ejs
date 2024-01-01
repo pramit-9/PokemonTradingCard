@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard/Card</title>
+    <%- include('../../css_js_partials/style') %>
+</head>
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <%- include('../partials/sidebar') %>
+        <!-- Sidebar End -->
+        <div class="content">
+            <!-- Navbar Start -->
+        <%- include('../partials/navbar') %>            
+             <!-- Navbar End -->
+
+              <!-- Sale & Revenue Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <div class="bg-light rounded h-100 p-4">
+                              
+                                   <h5 class="mb-4">Series Table</h5> 
+                               
+                            <div class="d-flex justify-content-end mb-3">
+                               <a href="/admin/series/create" class="btn btn-primary btn-sm">Add New</a>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Series_ID</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Logo</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% series.forEach((serie, idx)=>{ %>
+                                            <tr>
+                                                <th scope="row"><%= idx+1 %></th>
+                                                <th scope="row"><%= serie.id %></th>
+                                                <td><%= serie.name %></td>
+                                                <td><img src="<%= serie.image %>/high.webp" alt="" height="80px" /></td>
+                                                <td>
+                                                    <a href="/admin/series/edit/<%=serie.id%>" class="btn btn-success btn-sm">Edit</a>
+                                                    <a href="/admin/series/delete/<%=serie.id%>" class="btn btn-danger btn-sm">Delete</a>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sale & Revenue End -->
+        </div>
+    </div>
+
+    <%- include('../../css_js_partials/scripts') %>
+</body>
+</html>

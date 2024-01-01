@@ -1,0 +1,42 @@
+<header >
+    <nav class="navbar navbar-expand-lg navbar-dark nav-bg p-3">
+        <div class="container">
+            <a class="navbar-brand" href="/">Trade To Cart</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <% if (loggedIn) { %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/dashboard">Dashboard</a>
+                    </li>
+                    <% } %>
+
+
+                </ul>
+     
+
+              
+                    
+                    <% if (loggedIn) { %>
+                        <div class="d-flex align-items-baseline">
+                      <h6 class="text-white">Welcome  <%= username %> </h6>
+                      <a href="/logout" class="btn btn-custom-light1 ms-3">Logout</a>
+
+                      </div>
+                    <% } else { %>
+                        <div class="d-flex">
+                            <a href="/login" class="btn btn-custom-light ms-3">Login</a>
+                            <a href="/register" class="btn btn-custom-light1 ms-3">Register</a>
+                        </div>
+                    <% } %>
+                  
+                
+            </div>
+        </div>
+    </nav>
+</header>

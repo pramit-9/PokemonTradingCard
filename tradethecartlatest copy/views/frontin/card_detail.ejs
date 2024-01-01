@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= pokemon.name %></title>
+  <%- include('../css_js_partials/style.ejs') %>
+
+</head>
+
+<body>
+    <%- include('./common/navbar.ejs') %>
+  <div class="container pt-5">
+    <div class="row">
+      <div class="col-md-4">
+        <img src="/img/cards/<%= pokemon.image %>" alt="<%= pokemon.name %>" class="img-fluid w-75 ">
+      </div>
+      <div class="col-md-8 mt-3">
+        <div class="d-flex justify-content-between">
+          <h1 class="text-primary"><%= pokemon.name %></h1>
+          <h4 class="text-primary">Hp <%= pokemon.hp %></h4>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-between">
+          <div>
+            <p class="mb-0 h6">Weakness </p>
+            <p class="text-secondary h6">
+              <%= pokemon.weakness_type ? pokemon.weakness_type : '-' %>
+            </p>
+          </div>
+          <div>
+            <p class="mb-0 h6">Rarity </p>
+            <p class="text-secondary h6">
+              <%= pokemon.rarity ? pokemon.rarity : '-' %>
+            </p>
+          </div>
+          <div>
+            <p class="mb-0 h6">Retreat </p>
+            <p class="text-secondary h6">
+              <%= pokemon.retreat ? pokemon.retreat : '-' %>
+            </p>
+          </div>
+          <div>
+            <p class="mb-0 h6">Evolve From </p>
+            <p class="text-secondary h6">
+              <%= pokemon.evolveFrom ? pokemon.evolveFrom : '-' %>
+            </p>
+          </div>
+
+        </div>
+        <hr />
+
+        <p class="text-secondary h6">
+            <%= pokemon.description ? pokemon.description : '' %>
+          </p>
+          <button
+          id="addcollection"
+          type="button"
+          class="btn btn-outline-primary offset-4"
+          <% if (!loggedIn) { %>data-bs-toggle="modal" data-bs-target="#loginModal1"<% } %>
+          <% if (isInCollection) { %>disabled<% } %>
+        >
+          <% if (isInCollection) { %>
+            Already in collection
+          <% } else { %>
+            Add to my collection
+          <% } %>
+        </button>
+
+      </div>
+
+       
+
+    </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="loginModal1" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Login Required</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Please log in to access this feature.</p>
+        <!-- Link to the login page without using data-bs-dismiss -->
+        <a href="/login" class="btn btn-primary" id="goToLogin">Go to login</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  </div>
+  <%- include('./common/footer.ejs') %>
+  <%- include('../css_js_partials/scripts.ejs') %>
+  <script>
+    var loggedIn = <%= loggedIn %>;
+    var userid = <%= userid %>;
+    var url =  window.location.href.split('/');
+    var cardid = url.pop() || url.pop();
+
+
+  </script>
+
+  <script>
+
+    $(document).ready(function(){
+      $('#addcollection').on('click',function(){
+        console.log("ggg")
+        if(loggedIn){
+         if(userid && cardid){
+          $.ajax({
+          type: 'POST', // or 'GET' depending on your server-side route
+          url: '/save-to-collection', // Replace with your server-side route
+          data: { userid: userid, cardid: cardid },
+          success: function (response) {
+            
+            console.log("res from server",response);
+              if(response.success){
+                     // Disable the button
+            $('#addcollection').prop('disabled', true);
+            // Change the button text
+            $('#addcollection').text('Already in collection');
+            // Show a message
+            alert('This card is in your collection');
+          } else {
+            // Handle other cases if needed
+            alert('Failed to add the card to your collection');
+          }
+
+              
+          },
+          error: function (error) {
+            console.error(error);
+          }
+        });
+
+         }
+          
+        }else{
+          console.log('user is not logged in')
+        }
+      })
+    })
+
+  </script>
+
+</body>
+
+</html>
