@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard/Card</title>
+    <%- include('../../css_js_partials/style') %>
+</head>
+<body>
+    <div class="container-xxl position-relative bg-white d-flex p-0">
+        <!-- Sidebar Start -->
+        <%- include('../partials/sidebar') %>
+        <!-- Sidebar End -->
+        <div class="content">
+            <!-- Navbar Start -->
+        <%- include('../partials/navbar') %>            
+             <!-- Navbar End -->
+
+              <!-- Sale & Revenue Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-12">
+                        <div class="bg-light rounded h-100 p-4">
+                                   <h5 class="mb-4">Cards Table</h5> 
+                                   <% if(success) { %>
+                                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                        <i class="fa fa-exclamation-circle me-2"></i><%=success%>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
+                                    <% } %>
+                            <div class="d-flex justify-content-end mb-3">
+                               <a href="/admin/cards/create" class="btn btn-primary btn-sm">Add New</a>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Image</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">HP</th>
+                                            <th scope="col">Rarity</th>
+                                            <th scope="col">Category</th>
+                                            <th scope="col">Set</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% cards.forEach((card, idx)=>{ %>
+                                            <tr>
+                                                <th scope="row"><%= idx+1 %></th>
+                                                <td><img src="/img/cards/<%= card.image %>" alt="" height="80px" /></td>
+                                                <td><%= card.name %></td>
+                                                <td><%= card.hp %></td>
+                                                <td><%= card.rarity %></td>
+                                                <td><%= card.category_name %></td>
+                                                <td><%= card.set_id %></td>
+                                                <td>
+                                                    <a href="/admin/cards/edit/<%=card.id%>" class="btn btn-success btn-sm">Edit</a>
+                                                    <a href="/admin/cards/delete/<%=card.id%>" class="btn btn-danger btn-sm">Delete</a>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sale & Revenue End -->
+        </div>
+    </div>
+
+    <%- include('../../css_js_partials/scripts') %>
+</body>
+</html>
